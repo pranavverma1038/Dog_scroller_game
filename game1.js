@@ -3,7 +3,7 @@
 
 
 
-
+import {Sitting,Running,Jumping,Falling} from './playerStates.js';
 import {flyingEnemy,groundEnemy,climbingEnemy} from './enemy.js';
 
 window.addEventListener('load',function(){
@@ -49,9 +49,9 @@ window.addEventListener('load',function(){
     class Player{
         constructor(gameWidth,gameHeight){
             this.gameWidth=gameWidth;
-            this.gameHeight=gameHeight;
-            this.width=200;
-            this.height=200;
+            this.gameHeight=gameHeight-20;
+            this.width=100;
+            this.height=91.3;
             this.x=0;
             this.y=this.gameHeight-this.height;
             this.image=document.getElementById('playerImage');
@@ -60,10 +60,13 @@ window.addEventListener('load',function(){
             this.speed=0;
             this.vy=0;
             this.weight=1;
-            this.maxFrame=8;
+            this.maxFrame=5;
             this.fps=50;
             this.frameTimer=0;
             this.farmeInterval=1000/this.fps;
+            this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this)];
+            this.currentState=this.states[0];
+            this.currentState.enter();
         }
         draw(context){
             // context.fillStyle="white";
@@ -77,9 +80,10 @@ window.addEventListener('load',function(){
 
         }
         update(input,deltaTime,enemies){
+            this.currentState.handleInput(input);
             enemies.forEach(enemy=>{
                 const dx = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
-                const dy = (enemy.y + enemy.height / 2) - (this.y + this.height / 2);
+                const dy = (enemy.y + enemy.height / 2) - (this.y + this. height / 2);
                 const distance = Math.sqrt(dx * dx + dy * dy);
     
                 const playerRadius = this.width / 2 * 0.7;
@@ -87,6 +91,9 @@ window.addEventListener('load',function(){
     
                 if (distance < playerRadius +enemyRadius) {
                      gameOver = true;
+
+                //sprite animation
+                
             }
             });
             if(this.frameTimer > this.farmeInterval){
@@ -113,13 +120,7 @@ window.addEventListener('load',function(){
             else if(this.x >this.gameWidth- this.width) this.x=this.gameWidth- this.width;
             if(!this.onGround()){
                 this.vy+=this.weight;
-                this.frameY=1;
                 this.maxFrame=6;
-            }else{
-                this.vy=0;
-                this.frameY=0;
-                this.maxFrame=8;
-               
             }
             if(this.y> this.gameHeight-this.height){
                 this.y=this.gameHeight-this.height
@@ -128,6 +129,10 @@ window.addEventListener('load',function(){
         }
         onGround(){
             return this.y >= this.gameHeight - this.height;
+        }
+        setState(state){
+            this.currentState=this.states[state];
+            this.currentState.enter();
         }
     }
 
