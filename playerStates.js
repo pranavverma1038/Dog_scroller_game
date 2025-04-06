@@ -3,6 +3,9 @@ const states={
     RUNNING:1,
     JUMPING:2,
     FALLING:3,
+    ROLLING:4,
+    DIVING:5,
+    HIT:6
 }
 
 
@@ -28,6 +31,8 @@ export class Sitting extends State{
     handleInput(input){
          if(input.keys.includes('ArrowLeft') || input.keys.includes('ArrowRight') || input.keys.includes('ArrowUp')){
             this.player.setState(states.RUNNING,5);
+         }else if(input.keys.includes('Shift')){
+            this.player.setState(states.ROLLING,5);
          }
     }
 }
@@ -48,6 +53,8 @@ export class Running extends State{
             this.player.setState(states.SITTING,0);
          }else if(input.keys.includes('ArrowUp')){
             this.player.setState(states.JUMPING,5);
+         }else if(input.keys.includes('Shift')){
+            this.player.setState(states.ROLLING,5);
          }
     }
 }
@@ -69,7 +76,9 @@ export class Jumping extends State {
     handleInput(input) {
         if (this.player.vy > this.player.weight) {
             this.player.setState(states.FALLING,5); // 
-        }
+        }else if(input.keys.includes('Shift')){
+            this.player.setState(states.ROLLING,5);
+         }
     }
 }
 
@@ -88,6 +97,31 @@ export class Falling extends State {
     handleInput(input) {
         if (this.player.onGround()) {
             this.player.setState(states.RUNNING,5); // 
+        }
+    }
+
+    
+}
+
+export class Rolling extends State {
+    constructor(player) {
+        super('ROLLING');
+        this.player = player;
+    }
+
+    enter() {
+        this.player.frameX=0;
+        this.player.frameY = 6;
+        this.player.maxFrame=6;
+       
+    }
+    handleInput(input) {
+        if (!input.keys.includes('Shift') && this.player.onGround()) {
+            this.player.setState(states.RUNNING,5); // 
+        }else if (!input.keys.includes('Shift') && !this.player.onGround()) {
+            this.player.setState(states.FALLING,5); // 
+        }else if(input.keys.includes('Shift') && input.keys.includes('ArrowUp') && this.player.onGround()){
+            this.player.vy=-25;
         }
     }
 }

@@ -3,7 +3,7 @@
 
 
 
-import {Sitting,Running,Jumping,Falling} from './playerStates.js';
+import {Sitting,Running,Jumping,Falling,Rolling} from './playerStates.js';
 import {flyingEnemy,groundEnemy,climbingEnemy} from './enemy.js';
 
 window.addEventListener('load',function(){
@@ -24,7 +24,9 @@ window.addEventListener('load',function(){
                  if ((e.key === "ArrowDown" || 
                     e.key==="ArrowUp" || 
                     e.key==="ArrowLeft" || 
-                    e.key==="ArrowRight")
+                    e.key==="ArrowRight" ||
+                    e.key==="Shift"
+                )
                     
                     && this.keys.indexOf(e.key) === -1) {
                 this.keys.push(e.key);
@@ -35,7 +37,8 @@ window.addEventListener('load',function(){
                  if (e.key === "ArrowDown" ||
                     e.key==="ArrowUp" || 
                     e.key==="ArrowLeft" || 
-                    e.key==="ArrowRight"
+                    e.key==="ArrowRight" ||
+                    e.key==="Shift"
                   ) {
                 this.keys.splice(this.keys.indexOf(e.key),1);
             }
@@ -64,7 +67,7 @@ window.addEventListener('load',function(){
             this.fps=50;
             this.frameTimer=0;
             this.farmeInterval=1000/this.fps;
-            this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this)];
+            this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this),new Rolling(this)];
             this.currentState=this.states[0];
             this.currentState.enter();
         }
