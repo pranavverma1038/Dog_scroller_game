@@ -130,9 +130,11 @@ window.addEventListener('load',function(){
         onGround(){
             return this.y >= this.gameHeight - this.height;
         }
-        setState(state){
+        setState(state,speed){
             this.currentState=this.states[state];
             this.currentState.enter();
+            this.speed=speed;
+            background.speed = speed;
         }
     }
 
