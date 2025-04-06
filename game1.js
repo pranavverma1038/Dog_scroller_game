@@ -5,6 +5,7 @@
 
 import {Sitting,Running,Jumping,Falling,Rolling} from './playerStates.js';
 import {flyingEnemy,groundEnemy,climbingEnemy} from './enemy.js';
+import { Dust } from './particles.js';
 
 window.addEventListener('load',function(){
     const canvas=this.document.getElementById("canvas1");
@@ -70,8 +71,12 @@ window.addEventListener('load',function(){
             this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this),new Rolling(this)];
             this.currentState=this.states[0];
             this.currentState.enter();
+            this.particles = [new Dust(this.x,this.y)];
         }
         draw(context){
+            this.particles.forEach(particles=>{
+                particles.draw(context);
+            })
             // context.fillStyle="white";
             // context.fillRect(this.x,this.y,this.width,this.height);
             context.beginPath();
@@ -93,11 +98,9 @@ window.addEventListener('load',function(){
                 const enemyRadius = enemy.width / 2 * 0.7;
     
                 if (distance < playerRadius +enemyRadius) {
-                     gameOver = true;
+                     gameOver = true;                
+                }
 
-                //sprite animation
-                
-            }
             });
             if(this.frameTimer > this.farmeInterval){
                 if(this.frameX >= this.maxFrame) this.frameX=0;
@@ -128,6 +131,13 @@ window.addEventListener('load',function(){
             if(this.y> this.gameHeight-this.height){
                 this.y=this.gameHeight-this.height
             }
+
+            this.particles.forEach((particle,index)=>{
+                particle.update();
+                if(particle.markedForDeletion){
+                    this.particles.splice(index,1);
+                }
+            });
             
         }
         onGround(){
