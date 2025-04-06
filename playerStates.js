@@ -27,7 +27,7 @@ export class Sitting extends State{
     }
     handleInput(input){
          if(input.keys.includes('ArrowLeft') || input.keys.includes('ArrowRight') || input.keys.includes('ArrowUp')){
-            this.player.setState(states.RUNNING,0);
+            this.player.setState(states.RUNNING,5);
          }
     }
 }

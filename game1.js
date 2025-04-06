@@ -144,16 +144,16 @@ window.addEventListener('load',function(){
             this.gameHeight=gameHeight;
             this.image=document.getElementById("backgroundImage");
             this.width=2400;
-            this.height=700;
+            this.height=720;
             this.x=0;
             this.y=0;
-            this.speed=5;
+            this.speed=0;
             this.enemies=[];
             
         }
         draw(context){
             context.drawImage(this.image,this.x,this.y,this.width,this.height);
-            context.drawImage(this.image,this.x+this.width-this.speed,this.y,this.width,this.height);
+            context.drawImage(this.image,this.x+this.width-this.speed-1,this.y,this.width,this.height);
             this.enemies.forEach(enemy=>{
                 enemy.draw(context);
             })
