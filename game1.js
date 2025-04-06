@@ -89,20 +89,9 @@ window.addEventListener('load',function(){
 
         }
         update(input,deltaTime,enemies){
+            this.checkCollision(enemies);
             this.currentState.handleInput(input);
-            enemies.forEach(enemy=>{
-                const dx = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
-                const dy = (enemy.y + enemy.height / 2) - (this.y + this. height / 2);
-                const distance = Math.sqrt(dx * dx + dy * dy);
-    
-                const playerRadius = this.width / 2 * 0.7;
-                const enemyRadius = enemy.width / 2 * 0.7;
-    
-                if (distance < playerRadius +enemyRadius) {
-                     gameOver = true;                
-                }
-
-            });
+            
             if(this.frameTimer > this.farmeInterval){
                 if(this.frameX >= this.maxFrame) this.frameX=0;
                 else this.frameX++;
@@ -142,7 +131,7 @@ window.addEventListener('load',function(){
             if(this.particles.length>this.maxParticles){
                 this.particles=this.particles.slice(0,this.maxParticles);
             }
-            
+           
             
         }
         onGround(){
@@ -153,6 +142,25 @@ window.addEventListener('load',function(){
             this.currentState.enter();
             this.speed=speed;
             background.speed = speed;
+        }
+        checkCollision(){
+            enemies.forEach(enemy => {
+                const dx = (enemy.x + enemy.width / 2) - (this.x + this.width / 2);
+                const dy = (enemy.y + enemy.height / 2) - (this.y + this.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+        
+                const playerRadius = this.width / 2 * 0.7;
+                const enemyRadius = enemy.width / 2 * 0.7;
+        
+                if (distance < playerRadius + enemyRadius) {
+                    if (this.currentState instanceof Rolling) {
+                        enemy.markedForDeletion = true;
+                        score.value++;
+                    } else {
+                        gameOver = true;
+                    }
+                }
+            });
         }
     }
 
