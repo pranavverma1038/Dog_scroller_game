@@ -3,7 +3,7 @@
 
 
 
-import {Sitting,Running,Jumping,Falling,Rolling} from './playerStates.js';
+import {Sitting,Running,Jumping,Falling,Rolling,Hit} from './playerStates.js';
 import {flyingEnemy,groundEnemy,climbingEnemy} from './enemy.js';
 import { Dust,Fire } from './particles.js';
 
@@ -68,8 +68,9 @@ window.addEventListener('load',function(){
             this.maxParticles=100;
             this.fps=50;
             this.frameTimer=0;
+            this.hit = false;
             this.farmeInterval=1000/this.fps;
-            this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this),new Rolling(this)];
+            this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this),new Rolling(this),new Hit(this)];
             this.currentState=this.states[0];
             this.currentState.enter();
             this.particles = [new Dust(this.x,this.y),new Fire(this.x,this.y)];
@@ -156,8 +157,12 @@ window.addEventListener('load',function(){
                     if (this.currentState instanceof Rolling) {
                         enemy.markedForDeletion = true;
                         score.value++;
-                    } else {
-                        gameOver = true;
+                    } else if (!this.hit) {
+                        this.setState(5, 0); 
+                        this.hit = true;
+                        setTimeout(() => {
+                            gameOver = true;
+                        }, 1000);
                     }
                 }
             });
@@ -304,6 +309,10 @@ window.addEventListener('load',function(){
         score = { value: 0 };
         enemies=[];
         gameOver=false;
+        player.setState(0, 0);    
+        player.hit = false;      
+        player.frameX = 0;       
+        player.frameY = 0;  
         player.x=0;
         player.y=canvas.height-player.height;
         animate(0);

@@ -134,3 +134,24 @@ export class Rolling extends State {
         }
     }
 }
+
+
+
+export class Hit extends State {
+    constructor(player) {
+        super('HIT');
+        this.player = player;
+    }
+
+    enter() {
+        this.player.frameX=0;
+        this.player.frameY = 4;
+        this.player.maxFrame=10;
+       
+    }
+    handleInput(input) {
+       
+    }
+
+    
+}
