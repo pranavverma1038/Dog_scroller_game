@@ -5,7 +5,7 @@
 
 import {Sitting,Running,Jumping,Falling,Rolling} from './playerStates.js';
 import {flyingEnemy,groundEnemy,climbingEnemy} from './enemy.js';
-import { Dust } from './particles.js';
+import { Dust,Fire } from './particles.js';
 
 window.addEventListener('load',function(){
     const canvas=this.document.getElementById("canvas1");
@@ -65,13 +65,14 @@ window.addEventListener('load',function(){
             this.vy=0;
             this.weight=1;
             this.maxFrame=5;
+            this.maxParticles=100;
             this.fps=50;
             this.frameTimer=0;
             this.farmeInterval=1000/this.fps;
             this.states=[new Sitting(this),new Running(this),new Jumping(this),new Falling(this),new Rolling(this)];
             this.currentState=this.states[0];
             this.currentState.enter();
-            this.particles = [new Dust(this.x,this.y)];
+            this.particles = [new Dust(this.x,this.y),new Fire(this.x,this.y)];
         }
         draw(context){
             this.particles.forEach(particles=>{
@@ -138,6 +139,10 @@ window.addEventListener('load',function(){
                     this.particles.splice(index,1);
                 }
             });
+            if(this.particles.length>this.maxParticles){
+                this.particles=this.particles.slice(0,this.maxParticles);
+            }
+            
             
         }
         onGround(){

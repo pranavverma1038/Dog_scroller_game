@@ -1,4 +1,4 @@
-import { Dust } from "./particles.js";
+import { Dust,Fire } from "./particles.js";
 
 const states={
     SITTING:0,
@@ -51,7 +51,7 @@ export class Running extends State{
         this.player.maxFrame=6;
     }
     handleInput(input){
-        this.player.particles.push(
+        this.player.particles.unshift(
             new Dust(this.player.x + this.player.width * 0.5, this.player.y + this.player.height)
         );
         
@@ -122,6 +122,9 @@ export class Rolling extends State {
        
     }
     handleInput(input) {
+        this.player.particles.unshift(
+            new Fire(this.player.x + this.player.width * 0.5, this.player.y + this.player.height*0.5)
+        );
         if (!input.keys.includes('Shift') && this.player.onGround()) {
             this.player.setState(states.RUNNING,5); // 
         }else if (!input.keys.includes('Shift') && !this.player.onGround()) {

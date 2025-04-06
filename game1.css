@@ -13,7 +13,7 @@ body{
 }
 
 
-#playerImage, #backgroundImage, #enemyImage,#enemy_fly,#enemy_spider,#enemy_plant{
+#playerImage, #backgroundImage, #enemyImage,#enemy_fly,#enemy_spider,#enemy_plant,#fire{
     display: none;
 }
 
